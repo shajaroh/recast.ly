@@ -4,10 +4,17 @@ var Search = (props) => {
     props.search(event.target.value);
   };
   
+  var handleSubmit = function(event) {
+    var target = document.getElementsByClassName('search-bar')[0].children[0].value;
+    props.search(target);
+    document.getElementsByClassName('search-bar')[0].children[0].value = '';
+
+  };
+  
   return (
     <div className="search-bar form-inline">
       <input onChange={handleInput} className="form-control" type="text" />
-      <button className="btn hidden-sm-down">
+      <button onClick={handleSubmit} className="btn hidden-sm-down">
         <span className="glyphicon glyphicon-search"></span>
       </button>
     </div> 

@@ -15,7 +15,7 @@ class App extends React.Component {
   searchVideo(query) {
     var data = {
       key: window.YOUTUBE_API_KEY,
-      max: 5,
+      max: 10,
       query: query
     };
     

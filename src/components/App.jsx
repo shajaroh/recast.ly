@@ -1,12 +1,27 @@
 class App extends React.Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     
     this.state = {
       currentlyPlaying: 0,
-      videoList: window.exampleVideoData
+      videoList: []
     };
   }
+  
+  componentDidMount() {
+    this.searchVideo('Drake');
+  }
+  
+  searchVideo(query) {
+    var data = {
+      key: window.YOUTUBE_API_KEY,
+      max: 5,
+      query: query
+    };
+    
+    this.props.searchYouTube(data, this.updateList.bind(this));
+  }
+
   
   selectVideo(index) {
     this.setState({
@@ -14,12 +29,18 @@ class App extends React.Component {
     });
   } 
   
+  updateList(data) {
+    this.setState({
+      videoList: data
+    });
+  }
+  
   render() {
     return (
       <div>
         <nav className="navbar">
           <div className="col-md-6 offset-md-3">
-            <div><h5><em>search</em> view goes here</h5></div>
+            <window.Search search={this.searchVideo.bind(this)} />
           </div>
         </nav>
         <div className="row">

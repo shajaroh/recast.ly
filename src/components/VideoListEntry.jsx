@@ -1,14 +1,22 @@
-var VideoListEntry = () => (
-  <div className="video-list-entry media">
-    <div className="media-left media-middle">
-      <img className="media-object" src="https://i.ytimg.com/vi/1w8Z0UOXVaY/default.jpg" alt="" />
+var VideoListEntry = (prop) => {
+  var select = (e) => {
+    var index = e.target.getAttribute('data-reactid').charAt(10);
+    prop.appCallback(index);
+  };
+  
+  return (
+    <div className="video-list-entry media">
+      <div className="media-left media-middle">
+        <img className="media-object" src={prop.video.snippet.thumbnails.default.url} alt="" />
+      </div>
+      <div className="media-body">
+        <div onClick={select} className="video-list-entry-title">{prop.video.snippet.title}</div>
+        <div className="video-list-entry-detail">{prop.video.snippet.description}</div>
+      </div>
     </div>
-    <div className="media-body">
-      <div className="video-list-entry-title">Video Title</div>
-      <div className="video-list-entry-detail">Video Description</div>
-    </div>
-  </div>
-);
+  );
+};
+
 
 // PropTypes tell other developers what `props` a component expects
 // Warnings will be shown in the console when the defined rules are violated

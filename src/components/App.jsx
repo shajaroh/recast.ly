@@ -4,22 +4,24 @@ class App extends React.Component {
     
     this.state = {
       currentlyPlaying: 0,
-      videoList: []
+      videoList: [],
+      videoDetails: {} 
     };
   }
   
   componentDidMount() {
-    this.searchVideo('Drake');
+    this.searchVideo('Hotline Bling');
   }
   
   searchVideo(query) {
     var data = {
       key: window.YOUTUBE_API_KEY,
-      max: 10,
+      max: 5,
       query: query
     };
     
     this.props.searchYouTube(data, this.updateList.bind(this));
+    this.selectVideo(0);
   }
 
   
@@ -27,12 +29,29 @@ class App extends React.Component {
     this.setState({
       currentlyPlaying: index
     });
+    
+    if (this.state.videoList.length > 0) {
+      var options = { 
+        key: window.YOUTUBE_API_KEY,
+        videoId: this.state.videoList[index].id.videoId
+      };
+      this.props.searchYouTubeDetails(options, this.updateDetails);
+    }
+
   } 
   
   updateList(data) {
     this.setState({
       videoList: data
     });
+  }
+  
+  updateDetails(data) {
+    // this.setState({
+    //   videoDetails: data
+    // }); 
+    console.log(data);
+
   }
   
   render() {

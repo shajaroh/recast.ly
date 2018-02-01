@@ -15,6 +15,28 @@ var searchYouTube = (options, callback) => {
   };
   
   $.get(url, data, parseData);
+  
 };
 
 window.searchYouTube = searchYouTube;
+
+var searchYouTubeDetails = (options, callback) => {
+  // TODO
+  var url = 'https://www.googleapis.com/youtube/v3/videos';
+  var data = {
+    key: options.key,
+    maxResults: 1,
+    part: 'statistics, snippet',
+    id: options.videoId
+  };
+  
+  var parseData = function(data) {
+    callback(data.items);
+  };
+  
+  $.get(url, data, parseData);
+  
+};
+
+window.searchYouTube = searchYouTube;
+window.searchYouTubeDetails = searchYouTubeDetails;

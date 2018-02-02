@@ -1,12 +1,10 @@
-var VideoList = (prop) => {
-  return (
-    <div className="video-list">
-      {prop.videos.map((video, index) => 
-        <window.VideoListEntry key={index} video={video} appCallback={prop.cb} />  
-      )}
-    </div>
-  );
-};
+var VideoList = (props) => (
+  <div className="video-list">
+    {props.videos.map((video, index) => 
+      <window.VideoListEntry key={index} video={video} appCallback={props.cb} />  
+    )}
+  </div>
+);
 
 // PropTypes tell other developers what `props` a component expects
 // Warnings will be shown in the console when the defined rules are violated

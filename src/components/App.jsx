@@ -5,7 +5,7 @@ class App extends React.Component {
     this.state = {
       currentlyPlaying: 0,
       videoList: [],
-      videoDetails: {} 
+      videoDetails: [] 
     };
   }
   
@@ -19,8 +19,7 @@ class App extends React.Component {
       max: 5,
       query: query
     };
-    
-    this.props.searchYouTube(data, this.updateList.bind(this));
+    this.props.searchYouTube(data, this.updateList.bind(this), this.updateDetails.bind(this));
     this.selectVideo(0);
   }
 
@@ -29,15 +28,6 @@ class App extends React.Component {
     this.setState({
       currentlyPlaying: index
     });
-    
-    if (this.state.videoList.length > 0) {
-      var options = { 
-        key: window.YOUTUBE_API_KEY,
-        videoId: this.state.videoList[index].id.videoId
-      };
-      this.props.searchYouTubeDetails(options, this.updateDetails);
-    }
-
   } 
   
   updateList(data) {
@@ -47,31 +37,49 @@ class App extends React.Component {
   }
   
   updateDetails(data) {
-    // this.setState({
-    //   videoDetails: data
-    // }); 
+    this.setState({
+      videoDetails: data
+    }); 
     console.log(data);
-
   }
   
   render() {
-    return (
-      <div>
-        <nav className="navbar">
-          <div className="col-md-6 offset-md-3">
-            <window.Search search={this.searchVideo.bind(this)} />
-          </div>
-        </nav>
-        <div className="row">
-          <div className="col-md-7">
-            <window.VideoPlayer video={this.state.videoList[this.state.currentlyPlaying]} />
-          </div>
-          <div className="col-md-5">
-            <window.VideoList cb={this.selectVideo.bind(this)} videos={this.state.videoList} />
+    if (this.state.videoList.length > 0 && this.state.videoDetails.length > 0) {
+      return (
+        <div>
+          <nav className="navbar">
+            <div className="col-md-6 offset-md-3">
+              <window.Search search={this.searchVideo.bind(this)} />
+            </div>
+          </nav>
+          <div className="row">
+            <div className="col-md-7">
+              <window.VideoPlayer video={this.state.videoList[this.state.currentlyPlaying]} />
+              <window.VideoDetail detail={this.state.videoDetails[this.state.currentlyPlaying]} />
+            </div>
+            <div className="col-md-5">
+              <window.VideoList cb={this.selectVideo.bind(this)} videos={this.state.videoList} />
+            </div>
           </div>
         </div>
-      </div>
-    );
+      );
+    } else {
+      return (
+        <div>
+          <nav className="navbar">
+            <div className="col-md-6 offset-md-3">
+              <window.Search search={this.searchVideo.bind(this)} />
+            </div>
+          </nav>
+          <div className="row">
+            <div className="col-md-7">
+              <div className="video-player video-list">Loading... Please wait...</div>;
+            </div>
+          </div>
+        </div>
+      );
+    }
+    
   }
 } 
 

@@ -1,6 +1,5 @@
-var searchYouTube = (options, callback) => {
+var searchYouTube = (options, updateList, updateDetail) => {
   // TODO
-  var url = 'https://www.googleapis.com/youtube/v3/search';
   var data = {
     key: options.key,
     q: options.query,
@@ -9,34 +8,33 @@ var searchYouTube = (options, callback) => {
     videoEmbeddable: 'true',
     type: 'video'
   };
-  
-  var parseData = function(data) {
-    callback(data.items);
-  };
-  
-  $.get(url, data, parseData);
-  
+  var url = 'https://www.googleapis.com/youtube/v3/search?' + $.param(data);
+
+  fetch(url)
+    .then((results)=> results.text())
+    .then(text => {
+      var items = JSON.parse(text).items;
+      updateList(items);
+      var videoIds = items.map(item => item.id.videoId).join(', ');
+      var searchParam = {
+        key: data.key,
+        maxResults: data.maxResults,
+        part: 'statistics, snippet',
+        id: videoIds
+      };
+      var videoUrl = 'https://www.googleapis.com/youtube/v3/videos?' + $.param(searchParam);
+      
+      fetch(videoUrl)
+        .then((results) => results.text())
+        .then(text => {
+          updateDetail(JSON.parse(text).items);
+        });
+      
+    })
+    .catch(err => {
+      console.log(err);
+    });
+   
 };
 
 window.searchYouTube = searchYouTube;
-
-var searchYouTubeDetails = (options, callback) => {
-  // TODO
-  var url = 'https://www.googleapis.com/youtube/v3/videos';
-  var data = {
-    key: options.key,
-    maxResults: 1,
-    part: 'statistics, snippet',
-    id: options.videoId
-  };
-  
-  var parseData = function(data) {
-    callback(data.items);
-  };
-  
-  $.get(url, data, parseData);
-  
-};
-
-window.searchYouTube = searchYouTube;
-window.searchYouTubeDetails = searchYouTubeDetails;
